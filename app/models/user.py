@@ -25,6 +25,13 @@ class User(Base):
     )
 
     def __init__(self, *, name: str, email: str, hashed_password: str) -> None:
+        """Initialize a user model instance.
+
+        Args:
+            name: Display name of the user.
+            email: Unique email address for the user.
+            hashed_password: Bcrypt hash of the user's password.
+        """
         self.name = name
         self.email = email
         self.hashed_password = hashed_password

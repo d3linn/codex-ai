@@ -12,6 +12,7 @@ class APIRouter:
         response_model: Any | None = ...,
         status_code: int | None = ...,
         tags: list[str] | None = ...,
+        include_in_schema: bool | None = ...,
     ) -> Callable[[_TCallable], _TCallable]: ...
     def post(
         self,
@@ -36,15 +37,27 @@ class APIRouter:
         response_model: Any | None = ...,
         status_code: int | None = ...,
         tags: list[str] | None = ...,
+        response_class: Any | None = ...,
     ) -> Callable[[_TCallable], _TCallable]: ...
 
 class FastAPI:
     def __init__(self, *args: Any, **kwargs: Any) -> None: ...
     def include_router(self, router: APIRouter, *, prefix: str | None = ..., tags: list[str] | None = ...) -> None: ...
     def on_event(self, event_type: str) -> Callable[[_TCallable], _TCallable]: ...
+    def add_middleware(self, middleware_class: type[Any], *args: Any, **kwargs: Any) -> None: ...
 
 class HTTPException(Exception):
     def __init__(self, *, status_code: int, detail: Any = ...) -> None: ...
+
+
+class Response:
+    def __init__(
+        self,
+        content: Any | None = ...,
+        *,
+        status_code: int = ...,
+        media_type: str | None = ...,
+    ) -> None: ...
 
 class _Depends:
     def __call__(self, dependency: Any) -> Any: ...

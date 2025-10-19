@@ -9,6 +9,11 @@ if TYPE_CHECKING:
 
 @pytest.mark.asyncio
 async def test_user_crud_flow(client: "SimpleAsyncClient") -> None:
+    """Validate user CRUD endpoints end-to-end using the async client.
+
+    Args:
+        client: Async client fixture for interacting with the API.
+    """
     owner_payload = {"name": "Owner", "email": "owner@example.com", "password": "secret123"}
     signup_response = await client.post("/auth/signup", json=owner_payload)
     assert signup_response.status_code == 201
@@ -46,3 +51,27 @@ async def test_user_crud_flow(client: "SimpleAsyncClient") -> None:
 
     missing_response = await client.get(f"/users/{created_user_id}", headers=headers)
     assert missing_response.status_code == 404
+
+
+@pytest.mark.asyncio
+async def test_refresh_token_cannot_access_resources(client: "SimpleAsyncClient") -> None:
+    """Ensure refresh tokens cannot be used for resource access or refresh swaps."""
+
+    payload = {"name": "Owner", "email": "owner@example.com", "password": "secret123"}
+    signup_response = await client.post("/auth/signup", json=payload)
+    assert signup_response.status_code == 201
+
+    login_response = await client.post(
+        "/auth/login", json={"email": payload["email"], "password": payload["password"]}
+    )
+    assert login_response.status_code == 200
+    tokens = login_response.json()
+
+    refresh_headers = {"Authorization": f"Bearer {tokens['refresh_token']}"}
+    protected_response = await client.get("/users", headers=refresh_headers)
+    assert protected_response.status_code == 401
+
+    wrong_refresh_response = await client.post(
+        "/auth/refresh", json={"refresh_token": tokens["access_token"]}
+    )
+    assert wrong_refresh_response.status_code == 401

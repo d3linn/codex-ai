@@ -9,6 +9,8 @@ from app.core.config import get_settings
 
 
 class Base(DeclarativeBase):
+    """Declarative base class for all ORM models."""
+
     pass
 
 
@@ -18,5 +20,10 @@ AsyncSessionLocal = async_sessionmaker(engine, expire_on_commit=False)
 
 
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
+    """Yield a database session for request-scoped operations.
+
+    Yields:
+        AsyncSession: Session bound to the configured database engine.
+    """
     async with AsyncSessionLocal() as session:
         yield session

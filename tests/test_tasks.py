@@ -10,6 +10,17 @@ if TYPE_CHECKING:
 async def _create_user_and_get_token(
     client: "SimpleAsyncClient", name: str, email: str, password: str
 ) -> str:
+    """Register a user and return a fresh access token.
+
+    Args:
+        client: Async client used to call the API.
+        name: Name for the new user.
+        email: Email for the new user.
+        password: Password for the new user.
+
+    Returns:
+        str: Access token issued for the created user.
+    """
     signup_payload = {"name": name, "email": email, "password": password}
     signup_response = await client.post("/auth/signup", json=signup_payload)
     assert signup_response.status_code == 201
@@ -21,6 +32,11 @@ async def _create_user_and_get_token(
 
 @pytest.mark.asyncio
 async def test_task_crud_and_permissions(client: "SimpleAsyncClient") -> None:
+    """Ensure task endpoints enforce ownership and support full CRUD operations.
+
+    Args:
+        client: Async client fixture for interacting with the API.
+    """
     owner_token = await _create_user_and_get_token(client, "Owner", "owner@example.com", "secret123")
     other_token = await _create_user_and_get_token(client, "Other", "other@example.com", "secret456")
 

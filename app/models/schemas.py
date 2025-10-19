@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Literal
+
 from pydantic import BaseModel, EmailStr
 
 
@@ -11,6 +13,7 @@ class TokenPair(BaseModel):
 
 class TokenPayload(BaseModel):
     sub: EmailStr
+    token_type: Literal["access", "refresh"]
 
 
 class UserBase(BaseModel):
@@ -66,3 +69,11 @@ class TaskUpdate(BaseModel):
     title: str | None = None
     description: str | None = None
     completed: bool | None = None
+
+
+class SummarizeRequest(BaseModel):
+    text: str
+
+
+class SummarizeResponse(BaseModel):
+    summary: str

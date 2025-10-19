@@ -11,3 +11,7 @@ class BaseModel:
 
 class EmailStr(str):
     ...
+
+
+class ValidationError(Exception):
+    ...

@@ -1,0 +1,26 @@
+default_language_version:
+  python: python3.12
+
+repos:
+  - repo: https://github.com/psf/black
+    rev: 24.4.2
+    hooks:
+      - id: black
+        language_version: python3.12
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+      - id: flake8
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        args: ["--profile", "black"]
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest
+        entry: ./run_tests.sh
+        language: system
+        pass_filenames: false
+        stages: [commit]

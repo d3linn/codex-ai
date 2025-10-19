@@ -30,6 +30,14 @@ class Task(Base):
         completed: bool,
         user_id: int,
     ) -> None:
+        """Initialize a task model instance.
+
+        Args:
+            title: Short name of the task.
+            description: Detailed task description.
+            completed: Completion state of the task.
+            user_id: Identifier of the owning user.
+        """
         self.title = title
         self.description = description
         self.completed = completed
