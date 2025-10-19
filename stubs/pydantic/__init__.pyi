@@ -1,0 +1,17 @@
+from typing import Any, ClassVar, Generic, TypeVar
+
+_T = TypeVar("_T")
+
+class BaseModel:
+    model_config: ClassVar[Any]
+    def __init__(self, **data: Any) -> None: ...
+    def model_dump(self, *args: Any, **kwargs: Any) -> dict[str, Any]: ...
+    @classmethod
+    def model_validate(cls, obj: Any) -> Any: ...
+
+class EmailStr(str):
+    ...
+
+
+class ValidationError(Exception):
+    ...
